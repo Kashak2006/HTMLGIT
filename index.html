@@ -1,0 +1,216 @@
+<html>
+<head>
+  <title>Biryani House</title>
+  <style>
+    .body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #fff8f0;
+      color: #333;
+    }
+
+    .header {
+      background-color: #b22222;
+      color:#e7e5e5;
+      text-align: center;
+      padding: 20px;
+      text-align: center;
+      height:100px;
+      width: 2000;
+    }
+    .info{
+      background-color: black;
+      display:block;
+      font-size:20px;
+      font-family:Algerian;
+      padding: 10px;
+      text-align: left;
+      height: 30px;
+      margin: 0px;  
+      }
+      ul{
+      list-style-type:none;
+      margin: 0px;
+      padding: 0px;
+      overflow: hidden;
+      align-items: center;
+      }
+      li{
+        float: left;
+        }
+      .dropbtn{
+      display: inline-block;
+      color: red;
+      padding: 0px;
+      text-align:center;
+      padding: 14px 17px;
+      text-decoration: none;
+      justify-content: center;
+      align-items: center;
+      top: 120px;
+      font-size: 20px; 
+      }
+      .dropbtn:hover{
+      background-color: rgb(238, 209, 22);
+      color: white;
+      height: 10px;
+      }
+      .span{
+      color:red;
+      float: right;
+      padding: 14px 16px;
+      text-decoration: none;
+      justify-content: right;
+      position: absolute;
+      top: 140px;
+      right: 50px;
+      font-size: 20px;
+      }
+      .span:hover{
+      background-color: rgb(238, 209, 22);
+      color: white;
+      height: 10px;
+      }
+    .container {
+      display: flex;              /* two-column layout */
+      gap: 20px;
+      padding: 20px;
+    }
+
+    /* Left side: Gallery */
+    #gallery {
+      flex: 1;                    /* take 1 part of space */
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      background-color: bisque;
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      border-radius: 10px;
+    }
+
+    #gallery img {
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    }
+
+    /* Right side: About + Menu stacked */
+    .right-side {
+      flex: 2;                    /* take 2 parts of space */
+      display: flex;
+      flex-direction: column;     /* stack vertically */
+      gap: 20px;
+    }
+
+    #about,#inst {
+      background-color: #ffe4c4;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      font-size:20px;
+      text-align: center;
+    }
+    #menu{
+      background-color: #ffe4c4;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      font-size:20px;
+      text-align:justify;
+    }
+
+    #menu ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    #menu li {
+      padding: 8px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    /* #menu li:last-child {
+      border-bottom: none;
+    } */
+
+    footer {
+      background-color: #b22222;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      margin-top: 30px;
+      font-size: 30px;
+    }
+  </style>
+</head>
+<body class="body">
+        <div class="header">
+            <h1>MUMBAI DUM BIRYANI</h1>
+            <h3>SITABURDI NAGPUR</h3>
+        </div>
+        <div class="info">
+            <ul>
+                <li><a class="dropbtn">HOME</a></li>
+                <li><a class="dropbtn">MENU</a></li>
+                <li><a class="dropbtn">ORDER</a></li>
+                <li><a class="dropbtn">ABOUT</a></li>
+                <li><a class="span">Login</a></li>
+            </ul>
+        </div>
+
+  <div class="container">
+    <!-- Left side: Gallery -->
+    <section id="gallery">
+      <h1>Gallery</h1>
+      <img src="../image/sale 1.jpg" style="height: 200px;width: 300px;">
+      <img src="../image/sale 2.jpg" style="height: 200px;width: 300px;">
+      <img src="../image/sale 3.jpg"  style="height: 200px;width: 300px;">
+      <img src="../image/sale 4.jpg" style="height: 200px; width: 300px;">
+    </section>
+
+    <!-- Right side: About + Menu stacked -->
+    <div class="right-side">
+      <section id="about">
+        <h1>About Us</h1>
+        <p>
+          At Biryani House, we believe that biryani is more than just food — it's an emotion, a tradition, and a celebration of flavors. 
+          Born in the heart of India, our journey started with a simple vision: to bring the authentic taste of Hyderabadi, Lucknowi, 
+          and Kolkata biryanis to every plate, while adding our own touch of innovation
+        </p>
+      </section>
+
+      <section id="menu">
+        <h1 style="text-align: center;">Menu</h1>
+        <ul>
+          <li>Hyderabadi Biryani</li><br>
+          <img src="../image/biryani 1.jpg" alt="Hyderabadi Biryani" style="height: 200px;width: 300px;"><br>
+          <li>Lucknowi Biryani</li><br>
+          <img src="../image/biryani 2.jpg"  alt="Lucknowi Biryani" style="height: 200px;width: 300px;"><br>
+          <li>Kolkata Biryani</li><br>
+          <img src="../image/biryani 3.jpg" alt="kolkata biryani" style="height: 200px;width: 300px;"><br>
+          <li>Chicken Biryani</li><br>
+          <img src="../image/biryani 4.jpg" alt="chicken biryani" style="width:300px;height:200px;"><br>
+        </ul>
+      </section>
+
+      <section id="inst">
+        <h1>Instruction</h1>
+        <ol type="1">
+          <li>Welcome customers warmly and keep the place clean.</li><br>
+          <li>Prepare food with fresh ingredients and consistent taste.</li><br>
+          <li>Display menu clearly with prices and offers.</li><br>
+          <li>Serve orders quickly and politely.</li><br>
+          <li>Follow hygiene and safety rules.</li><br>
+          <li>Promote specials through gallery, website,and social media.</li><br>
+        </ol>
+      </section>
+    </div>
+  </div>
+  <footer>
+    <p>www.dumbiryani.com</p>
+  </footer>
+
+</body>
+</html>
