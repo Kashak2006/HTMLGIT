@@ -1,0 +1,763 @@
+import { useState } from 'react';
+import { Bot, X, Send, Users, DollarSign, ShoppingCart, FolderKanban, Package } from 'lucide-react';
+
+export default function App() {
+  const [activeTab, setActiveTab] = useState('dashboard');
+  const [aiOpen, setAiOpen] = useState(false);
+  const [chatInput, setChatInput] = useState('');
+  const [chatMessages, setChatMessages] = useState<Array<{role: string; text: string}>>([
+    { role: 'ai', text: 'Hello! I can help you with HR, Finance, Sales, Projects, and Inventory. What do you need?' }
+  ]);
+
+  const handleSendMessage = () => {
+    if (!chatInput.trim()) return;
+    
+    setChatMessages([...chatMessages, { role: 'user', text: chatInput }]);
+    
+    setTimeout(() => {
+      let response = 'I can help you with that. Please check the relevant section for detailed information.';
+      
+      if (chatInput.toLowerCase().includes('hr') || chatInput.toLowerCase().includes('employee')) {
+        response = 'Your HR department has 456 active employees. Check the HR tab for attendance, performance, and payroll details.';
+      } else if (chatInput.toLowerCase().includes('finance') || chatInput.toLowerCase().includes('money')) {
+        response = 'Total revenue is $2.4M with $845K net profit. View the Finance tab for detailed reports.';
+      } else if (chatInput.toLowerCase().includes('sales') || chatInput.toLowerCase().includes('customer')) {
+        response = 'Sales are up 18.2% with 8,234 orders completed. Check Sales tab for customer details.';
+      } else if (chatInput.toLowerCase().includes('project')) {
+        response = 'You have 23 active projects. 15 are on track, 5 need attention. See Projects tab for details.';
+      } else if (chatInput.toLowerCase().includes('inventory') || chatInput.toLowerCase().includes('stock')) {
+        response = 'Total inventory: 12,567 items. 890 items are low stock. Check Inventory tab for reorder alerts.';
+      }
+      
+      setChatMessages(prev => [...prev, { role: 'ai', text: response }]);
+    }, 1000);
+    
+    setChatInput('');
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100">
+      {/* Header */}
+      <header className="bg-white shadow-sm border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">Company ERP System</h1>
+              <p className="text-sm text-gray-600">Manage your business operations</p>
+            </div>
+            <button
+              onClick={() => setAiOpen(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            >
+              <Bot className="w-5 h-5" />
+              <span>AI Assistant</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Navigation Tabs */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4">
+          <nav className="flex gap-1">
+            {[
+              { id: 'dashboard', label: 'Dashboard', icon: '📊' },
+              { id: 'hr', label: 'Human Resources', icon: '👥' },
+              { id: 'finance', label: 'Finance', icon: '💰' },
+              { id: 'sales', label: 'Sales', icon: '🛒' },
+              { id: 'projects', label: 'Projects', icon: '📁' },
+              { id: 'inventory', label: 'Inventory', icon: '📦' },
+            ].map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
+                  activeTab === tab.id
+                    ? 'border-blue-600 text-blue-600'
+                    : 'border-transparent text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                <span className="mr-2">{tab.icon}</span>
+                {tab.label}
+              </button>
+            ))}
+          </nav>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 py-6">
+        {/* Dashboard View */}
+        {activeTab === 'dashboard' && (
+          <div>
+            <h2 className="text-xl font-bold text-gray-900 mb-6">Dashboard Overview</h2>
+            
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <div className="flex items-center gap-3 mb-2">
+                  <Users className="w-8 h-8 text-purple-600" />
+                  <div>
+                    <p className="text-sm text-gray-600">Employees</p>
+                    <p className="text-2xl font-bold text-gray-900">456</p>
+                  </div>
+                </div>
+                <p className="text-xs text-green-600">+2.1% Active</p>
+              </div>
+
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <div className="flex items-center gap-3 mb-2">
+                  <DollarSign className="w-8 h-8 text-green-600" />
+                  <div>
+                    <p className="text-sm text-gray-600">Revenue</p>
+                    <p className="text-2xl font-bold text-gray-900">$2.4M</p>
+                  </div>
+                </div>
+                <p className="text-xs text-green-600">+12.5% Growth</p>
+              </div>
+
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <div className="flex items-center gap-3 mb-2">
+                  <ShoppingCart className="w-8 h-8 text-blue-600" />
+                  <div>
+                    <p className="text-sm text-gray-600">Orders</p>
+                    <p className="text-2xl font-bold text-gray-900">8,234</p>
+                  </div>
+                </div>
+                <p className="text-xs text-green-600">+8.2% This month</p>
+              </div>
+
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <div className="flex items-center gap-3 mb-2">
+                  <FolderKanban className="w-8 h-8 text-orange-600" />
+                  <div>
+                    <p className="text-sm text-gray-600">Projects</p>
+                    <p className="text-2xl font-bold text-gray-900">23</p>
+                  </div>
+                </div>
+                <p className="text-xs text-orange-600">5 Need attention</p>
+              </div>
+
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <div className="flex items-center gap-3 mb-2">
+                  <Package className="w-8 h-8 text-red-600" />
+                  <div>
+                    <p className="text-sm text-gray-600">Inventory</p>
+                    <p className="text-2xl font-bold text-gray-900">12,567</p>
+                  </div>
+                </div>
+                <p className="text-xs text-red-600">890 Low stock</p>
+              </div>
+            </div>
+
+            {/* Quick Info */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <h3 className="font-semibold text-gray-900 mb-4">Recent Activities</h3>
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3 p-3 bg-blue-50 rounded">
+                    <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
+                    <p className="text-sm text-gray-700">New order #8234 received - $12,450</p>
+                  </div>
+                  <div className="flex items-center gap-3 p-3 bg-green-50 rounded">
+                    <div className="w-2 h-2 bg-green-600 rounded-full"></div>
+                    <p className="text-sm text-gray-700">Project "Website Redesign" completed</p>
+                  </div>
+                  <div className="flex items-center gap-3 p-3 bg-orange-50 rounded">
+                    <div className="w-2 h-2 bg-orange-600 rounded-full"></div>
+                    <p className="text-sm text-gray-700">890 items need restocking</p>
+                  </div>
+                  <div className="flex items-center gap-3 p-3 bg-purple-50 rounded">
+                    <div className="w-2 h-2 bg-purple-600 rounded-full"></div>
+                    <p className="text-sm text-gray-700">5 new employees onboarded</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <h3 className="font-semibold text-gray-900 mb-4">Alerts & Notifications</h3>
+                <div className="space-y-3">
+                  <div className="flex items-start gap-3 p-3 bg-red-50 rounded border-l-4 border-red-600">
+                    <p className="text-sm text-gray-700"><strong>Urgent:</strong> 225 items out of stock</p>
+                  </div>
+                  <div className="flex items-start gap-3 p-3 bg-yellow-50 rounded border-l-4 border-yellow-600">
+                    <p className="text-sm text-gray-700"><strong>Warning:</strong> 5 projects behind schedule</p>
+                  </div>
+                  <div className="flex items-start gap-3 p-3 bg-blue-50 rounded border-l-4 border-blue-600">
+                    <p className="text-sm text-gray-700"><strong>Info:</strong> Payroll processing due tomorrow</p>
+                  </div>
+                  <div className="flex items-start gap-3 p-3 bg-green-50 rounded border-l-4 border-green-600">
+                    <p className="text-sm text-gray-700"><strong>Success:</strong> Monthly sales target achieved</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* HR View */}
+        {activeTab === 'hr' && (
+          <div>
+            <h2 className="text-xl font-bold text-gray-900 mb-6">Human Resources Management</h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <p className="text-sm text-gray-600 mb-1">Total Employees</p>
+                <p className="text-3xl font-bold text-gray-900">456</p>
+                <p className="text-xs text-green-600 mt-2">+2.1% from last month</p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <p className="text-sm text-gray-600 mb-1">On Leave Today</p>
+                <p className="text-3xl font-bold text-gray-900">23</p>
+                <p className="text-xs text-gray-500 mt-2">5.0% of workforce</p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <p className="text-sm text-gray-600 mb-1">Open Positions</p>
+                <p className="text-3xl font-bold text-gray-900">12</p>
+                <p className="text-xs text-blue-600 mt-2">Actively hiring</p>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+              <div className="p-4 border-b border-gray-200">
+                <h3 className="font-semibold text-gray-900">Employee List</h3>
+              </div>
+              <table className="w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Name</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Department</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Position</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Status</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Salary</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-sm text-gray-900">John Smith</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">Sales</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">Sales Manager</td>
+                    <td className="px-6 py-4"><span className="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">Active</span></td>
+                    <td className="px-6 py-4 text-sm text-gray-900">$75,000</td>
+                  </tr>
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-sm text-gray-900">Sarah Johnson</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">Finance</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">Accountant</td>
+                    <td className="px-6 py-4"><span className="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">Active</span></td>
+                    <td className="px-6 py-4 text-sm text-gray-900">$65,000</td>
+                  </tr>
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-sm text-gray-900">Mike Williams</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">IT</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">Developer</td>
+                    <td className="px-6 py-4"><span className="px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded-full">On Leave</span></td>
+                    <td className="px-6 py-4 text-sm text-gray-900">$85,000</td>
+                  </tr>
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-sm text-gray-900">Emily Brown</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">Marketing</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">Marketing Lead</td>
+                    <td className="px-6 py-4"><span className="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">Active</span></td>
+                    <td className="px-6 py-4 text-sm text-gray-900">$72,000</td>
+                  </tr>
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-sm text-gray-900">David Lee</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">Operations</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">Operations Manager</td>
+                    <td className="px-6 py-4"><span className="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">Active</span></td>
+                    <td className="px-6 py-4 text-sm text-gray-900">$80,000</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* Finance View */}
+        {activeTab === 'finance' && (
+          <div>
+            <h2 className="text-xl font-bold text-gray-900 mb-6">Finance & Accounting</h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <p className="text-sm text-gray-600 mb-1">Total Revenue</p>
+                <p className="text-3xl font-bold text-green-600">$2,456,890</p>
+                <p className="text-xs text-green-600 mt-2">+12.5% increase</p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <p className="text-sm text-gray-600 mb-1">Total Expenses</p>
+                <p className="text-3xl font-bold text-red-600">$1,611,660</p>
+                <p className="text-xs text-green-600 mt-2">-3.2% decrease</p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <p className="text-sm text-gray-600 mb-1">Net Profit</p>
+                <p className="text-3xl font-bold text-blue-600">$845,230</p>
+                <p className="text-xs text-green-600 mt-2">+15.3% increase</p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <p className="text-sm text-gray-600 mb-1">Cash Balance</p>
+                <p className="text-3xl font-bold text-gray-900">$567,450</p>
+                <p className="text-xs text-green-600 mt-2">+8.7% increase</p>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+              <div className="p-4 border-b border-gray-200">
+                <h3 className="font-semibold text-gray-900">Recent Transactions</h3>
+              </div>
+              <table className="w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Date</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Description</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Type</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Amount</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-sm text-gray-600">2026-02-07</td>
+                    <td className="px-6 py-4 text-sm text-gray-900">Client Payment - Acme Corp</td>
+                    <td className="px-6 py-4"><span className="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">Income</span></td>
+                    <td className="px-6 py-4 text-sm font-medium text-green-600">+$45,000</td>
+                    <td className="px-6 py-4"><span className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">Completed</span></td>
+                  </tr>
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-sm text-gray-600">2026-02-06</td>
+                    <td className="px-6 py-4 text-sm text-gray-900">Office Rent - February</td>
+                    <td className="px-6 py-4"><span className="px-2 py-1 text-xs bg-red-100 text-red-800 rounded-full">Expense</span></td>
+                    <td className="px-6 py-4 text-sm font-medium text-red-600">-$12,500</td>
+                    <td className="px-6 py-4"><span className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">Completed</span></td>
+                  </tr>
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-sm text-gray-600">2026-02-06</td>
+                    <td className="px-6 py-4 text-sm text-gray-900">Subscription Revenue</td>
+                    <td className="px-6 py-4"><span className="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">Income</span></td>
+                    <td className="px-6 py-4 text-sm font-medium text-green-600">+$28,900</td>
+                    <td className="px-6 py-4"><span className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">Completed</span></td>
+                  </tr>
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-sm text-gray-600">2026-02-05</td>
+                    <td className="px-6 py-4 text-sm text-gray-900">Software Licenses</td>
+                    <td className="px-6 py-4"><span className="px-2 py-1 text-xs bg-red-100 text-red-800 rounded-full">Expense</span></td>
+                    <td className="px-6 py-4 text-sm font-medium text-red-600">-$3,400</td>
+                    <td className="px-6 py-4"><span className="px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded-full">Pending</span></td>
+                  </tr>
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-sm text-gray-600">2026-02-05</td>
+                    <td className="px-6 py-4 text-sm text-gray-900">Service Contract Payment</td>
+                    <td className="px-6 py-4"><span className="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">Income</span></td>
+                    <td className="px-6 py-4 text-sm font-medium text-green-600">+$67,500</td>
+                    <td className="px-6 py-4"><span className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">Completed</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* Sales View */}
+        {activeTab === 'sales' && (
+          <div>
+            <h2 className="text-xl font-bold text-gray-900 mb-6">Sales Management</h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <p className="text-sm text-gray-600 mb-1">Total Sales</p>
+                <p className="text-3xl font-bold text-gray-900">$805,000</p>
+                <p className="text-xs text-green-600 mt-2">+18.2% this month</p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <p className="text-sm text-gray-600 mb-1">Total Orders</p>
+                <p className="text-3xl font-bold text-gray-900">8,234</p>
+                <p className="text-xs text-green-600 mt-2">+8.2% increase</p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <p className="text-sm text-gray-600 mb-1">Active Customers</p>
+                <p className="text-3xl font-bold text-gray-900">2,345</p>
+                <p className="text-xs text-green-600 mt-2">+8.9% growth</p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <p className="text-sm text-gray-600 mb-1">Avg Order Value</p>
+                <p className="text-3xl font-bold text-gray-900">$164.67</p>
+                <p className="text-xs text-green-600 mt-2">+5.2% increase</p>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+              <div className="p-4 border-b border-gray-200">
+                <h3 className="font-semibold text-gray-900">Recent Orders</h3>
+              </div>
+              <table className="w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Order ID</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Customer</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Product</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Amount</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-sm font-medium text-blue-600">ORD-1234</td>
+                    <td className="px-6 py-4 text-sm text-gray-900">Acme Corporation</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">Enterprise License</td>
+                    <td className="px-6 py-4 text-sm font-medium text-gray-900">$12,450</td>
+                    <td className="px-6 py-4"><span className="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">Completed</span></td>
+                  </tr>
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-sm font-medium text-blue-600">ORD-1235</td>
+                    <td className="px-6 py-4 text-sm text-gray-900">TechStart Inc</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">Professional Plan</td>
+                    <td className="px-6 py-4 text-sm font-medium text-gray-900">$5,200</td>
+                    <td className="px-6 py-4"><span className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">Processing</span></td>
+                  </tr>
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-sm font-medium text-blue-600">ORD-1236</td>
+                    <td className="px-6 py-4 text-sm text-gray-900">Global Systems</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">Custom Integration</td>
+                    <td className="px-6 py-4 text-sm font-medium text-gray-900">$28,900</td>
+                    <td className="px-6 py-4"><span className="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">Completed</span></td>
+                  </tr>
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-sm font-medium text-blue-600">ORD-1237</td>
+                    <td className="px-6 py-4 text-sm text-gray-900">Innovation Labs</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">Standard Package</td>
+                    <td className="px-6 py-4 text-sm font-medium text-gray-900">$3,450</td>
+                    <td className="px-6 py-4"><span className="px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded-full">Pending</span></td>
+                  </tr>
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-sm font-medium text-blue-600">ORD-1238</td>
+                    <td className="px-6 py-4 text-sm text-gray-900">Digital Solutions</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">Premium Service</td>
+                    <td className="px-6 py-4 text-sm font-medium text-gray-900">$8,750</td>
+                    <td className="px-6 py-4"><span className="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">Completed</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* Projects View */}
+        {activeTab === 'projects' && (
+          <div>
+            <h2 className="text-xl font-bold text-gray-900 mb-6">Project Management</h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <p className="text-sm text-gray-600 mb-1">Total Projects</p>
+                <p className="text-3xl font-bold text-gray-900">23</p>
+                <p className="text-xs text-gray-500 mt-2">Active projects</p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <p className="text-sm text-gray-600 mb-1">On Track</p>
+                <p className="text-3xl font-bold text-green-600">15</p>
+                <p className="text-xs text-green-600 mt-2">65% on schedule</p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <p className="text-sm text-gray-600 mb-1">Need Attention</p>
+                <p className="text-3xl font-bold text-orange-600">5</p>
+                <p className="text-xs text-orange-600 mt-2">Behind schedule</p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <p className="text-sm text-gray-600 mb-1">Completed</p>
+                <p className="text-3xl font-bold text-blue-600">3</p>
+                <p className="text-xs text-blue-600 mt-2">This month</p>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+              <div className="p-4 border-b border-gray-200">
+                <h3 className="font-semibold text-gray-900">Active Projects</h3>
+              </div>
+              <table className="w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Project Name</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Manager</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Progress</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Deadline</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-sm font-medium text-gray-900">Website Redesign</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">Sarah Johnson</td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2">
+                        <div className="flex-1 bg-gray-200 rounded-full h-2 max-w-[100px]">
+                          <div className="bg-green-600 h-2 rounded-full" style={{width: '85%'}}></div>
+                        </div>
+                        <span className="text-sm text-gray-600">85%</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-600">2026-02-20</td>
+                    <td className="px-6 py-4"><span className="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">On Track</span></td>
+                  </tr>
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-sm font-medium text-gray-900">Mobile App Development</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">Mike Williams</td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2">
+                        <div className="flex-1 bg-gray-200 rounded-full h-2 max-w-[100px]">
+                          <div className="bg-blue-600 h-2 rounded-full" style={{width: '60%'}}></div>
+                        </div>
+                        <span className="text-sm text-gray-600">60%</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-600">2026-03-15</td>
+                    <td className="px-6 py-4"><span className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">In Progress</span></td>
+                  </tr>
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-sm font-medium text-gray-900">CRM Integration</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">David Lee</td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2">
+                        <div className="flex-1 bg-gray-200 rounded-full h-2 max-w-[100px]">
+                          <div className="bg-orange-600 h-2 rounded-full" style={{width: '35%'}}></div>
+                        </div>
+                        <span className="text-sm text-gray-600">35%</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-600">2026-02-10</td>
+                    <td className="px-6 py-4"><span className="px-2 py-1 text-xs bg-orange-100 text-orange-800 rounded-full">At Risk</span></td>
+                  </tr>
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-sm font-medium text-gray-900">Database Migration</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">Emily Brown</td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2">
+                        <div className="flex-1 bg-gray-200 rounded-full h-2 max-w-[100px]">
+                          <div className="bg-green-600 h-2 rounded-full" style={{width: '95%'}}></div>
+                        </div>
+                        <span className="text-sm text-gray-600">95%</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-600">2026-02-12</td>
+                    <td className="px-6 py-4"><span className="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">On Track</span></td>
+                  </tr>
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-sm font-medium text-gray-900">Security Audit</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">John Smith</td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2">
+                        <div className="flex-1 bg-gray-200 rounded-full h-2 max-w-[100px]">
+                          <div className="bg-blue-600 h-2 rounded-full" style={{width: '45%'}}></div>
+                        </div>
+                        <span className="text-sm text-gray-600">45%</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-600">2026-03-01</td>
+                    <td className="px-6 py-4"><span className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">In Progress</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* Inventory View */}
+        {activeTab === 'inventory' && (
+          <div>
+            <h2 className="text-xl font-bold text-gray-900 mb-6">Inventory Management</h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <p className="text-sm text-gray-600 mb-1">Total Items</p>
+                <p className="text-3xl font-bold text-gray-900">12,567</p>
+                <p className="text-xs text-gray-500 mt-2">In system</p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <p className="text-sm text-gray-600 mb-1">In Stock</p>
+                <p className="text-3xl font-bold text-green-600">11,452</p>
+                <p className="text-xs text-green-600 mt-2">91.1% available</p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <p className="text-sm text-gray-600 mb-1">Low Stock</p>
+                <p className="text-3xl font-bold text-orange-600">890</p>
+                <p className="text-xs text-orange-600 mt-2">Need reorder</p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <p className="text-sm text-gray-600 mb-1">Out of Stock</p>
+                <p className="text-3xl font-bold text-red-600">225</p>
+                <p className="text-xs text-red-600 mt-2">Urgent action</p>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+              <div className="p-4 border-b border-gray-200">
+                <h3 className="font-semibold text-gray-900">Inventory Status</h3>
+              </div>
+              <table className="w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Item Name</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">SKU</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Current Stock</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Min Level</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-sm font-medium text-gray-900">Office Supplies - Paper</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">OFS-1234</td>
+                    <td className="px-6 py-4 text-sm text-gray-900">125</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">500</td>
+                    <td className="px-6 py-4"><span className="px-2 py-1 text-xs bg-orange-100 text-orange-800 rounded-full">Low Stock</span></td>
+                  </tr>
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-sm font-medium text-gray-900">Electronic Components</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">ELC-5678</td>
+                    <td className="px-6 py-4 text-sm text-gray-900">67</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">300</td>
+                    <td className="px-6 py-4"><span className="px-2 py-1 text-xs bg-orange-100 text-orange-800 rounded-full">Low Stock</span></td>
+                  </tr>
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-sm font-medium text-gray-900">Packaging Materials</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">PKG-9012</td>
+                    <td className="px-6 py-4 text-sm text-red-600 font-bold">0</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">1000</td>
+                    <td className="px-6 py-4"><span className="px-2 py-1 text-xs bg-red-100 text-red-800 rounded-full">Out of Stock</span></td>
+                  </tr>
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-sm font-medium text-gray-900">Safety Equipment</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">SFT-3456</td>
+                    <td className="px-6 py-4 text-sm text-gray-900">45</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">200</td>
+                    <td className="px-6 py-4"><span className="px-2 py-1 text-xs bg-orange-100 text-orange-800 rounded-full">Low Stock</span></td>
+                  </tr>
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-sm font-medium text-gray-900">Cleaning Supplies</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">CLN-7890</td>
+                    <td className="px-6 py-4 text-sm text-red-600 font-bold">0</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">500</td>
+                    <td className="px-6 py-4"><span className="px-2 py-1 text-xs bg-red-100 text-red-800 rounded-full">Out of Stock</span></td>
+                  </tr>
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-sm font-medium text-gray-900">Computer Peripherals</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">CMP-4567</td>
+                    <td className="px-6 py-4 text-sm text-gray-900">850</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">200</td>
+                    <td className="px-6 py-4"><span className="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">In Stock</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+      </main>
+
+      {/* AI Assistant Panel */}
+      {aiOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-2xl w-full max-w-2xl flex flex-col" style={{maxHeight: '80vh'}}>
+            {/* AI Header */}
+            <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 rounded-t-lg flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                  <Bot className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="font-semibold">AI Assistant</h3>
+                  <p className="text-xs text-blue-100">Ask me anything about your business</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setAiOpen(false)}
+                className="p-2 hover:bg-white hover:bg-opacity-10 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Quick Buttons */}
+            <div className="p-4 border-b border-gray-200 bg-gray-50">
+              <p className="text-xs text-gray-600 mb-2">Quick questions:</p>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => setChatInput('Show me HR summary')}
+                  className="px-3 py-1 bg-purple-100 text-purple-700 text-xs rounded-full hover:bg-purple-200"
+                >
+                  👥 HR Summary
+                </button>
+                <button
+                  onClick={() => setChatInput('What is my revenue?')}
+                  className="px-3 py-1 bg-green-100 text-green-700 text-xs rounded-full hover:bg-green-200"
+                >
+                  💰 Revenue Status
+                </button>
+                <button
+                  onClick={() => setChatInput('Show sales report')}
+                  className="px-3 py-1 bg-blue-100 text-blue-700 text-xs rounded-full hover:bg-blue-200"
+                >
+                  🛒 Sales Report
+                </button>
+                <button
+                  onClick={() => setChatInput('Project status update')}
+                  className="px-3 py-1 bg-orange-100 text-orange-700 text-xs rounded-full hover:bg-orange-200"
+                >
+                  📁 Projects
+                </button>
+                <button
+                  onClick={() => setChatInput('Check inventory levels')}
+                  className="px-3 py-1 bg-red-100 text-red-700 text-xs rounded-full hover:bg-red-200"
+                >
+                  📦 Inventory
+                </button>
+              </div>
+            </div>
+
+            {/* Chat Messages */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+              {chatMessages.map((msg, idx) => (
+                <div key={idx} className={`flex gap-3 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                  {msg.role === 'ai' && (
+                    <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                      <Bot className="w-4 h-4 text-white" />
+                    </div>
+                  )}
+                  <div className={`max-w-[70%] rounded-lg p-3 ${
+                    msg.role === 'user' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-900'
+                  }`}>
+                    <p className="text-sm">{msg.text}</p>
+                  </div>
+                  {msg.role === 'user' && (
+                    <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-xs font-semibold text-gray-700">You</span>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Input Area */}
+            <div className="p-4 border-t border-gray-200 bg-white rounded-b-lg">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={chatInput}
+                  onChange={(e) => setChatInput(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                  placeholder="Type your question here..."
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                />
+                <button
+                  onClick={handleSendMessage}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  <Send className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

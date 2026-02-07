@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SmartLit ERP Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background: #f4f4f4; }
+    header { background: #2c3e50; color: white; padding: 15px; text-align: center; }
+    nav { background: #34495e; padding: 10px; display: flex; justify-content: center; }
+    nav a { color: white; margin: 0 15px; text-decoration: none; font-weight: bold; }
+    nav a:hover { text-decoration: underline; }
+
+    .dashboard { display: flex; flex-wrap: wrap; justify-content: center; margin: 20px; }
+    .card {
+      background: white; width: 180px; margin: 10px; padding: 15px;
+      border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      text-align: center; cursor: pointer; transition: transform 0.2s;
+    }
+    .card:hover { transform: scale(1.05); background: #ecf0f1; }
+    .card h3 { margin: 10px 0; color: #2c3e50; }
+
+    section { display: none; padding: 20px; margin: 20px; background: white; border-radius: 8px; }
+    section.active { display: block; }
+    h2 { color: #2c3e50; }
+    .module-item { background: #ecf0f1; padding: 10px; margin: 8px 0; border-radius: 6px; }
+
+    .charts { display: flex; flex-wrap: wrap; justify-content: space-around; margin-top: 20px; }
+    .chart-container {
+      width: 250px; height: 180px; margin: 10px;
+      background: #fff; border-radius: 8px; padding: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    canvas { width: 100% !important; height: 100% !important; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>SmartLit ERP System</h1>
+    <p>Interactive Dashboard with Compact Charts</p>
+  </header>
+
+  <nav>
+    <a href="#dashboard" onclick="showSection('dashboard')">Dashboard</a>
+    <a href="#hr" onclick="showSection('hr')">HR</a>
+    <a href="#finance" onclick="showSection('finance')">Finance</a>
+    <a href="#sales" onclick="showSection('sales')">Sales</a>
+    <a href="#projects" onclick="showSection('projects')">Projects</a>
+    <a href="#inventory" onclick="showSection('inventory')">Inventory</a>
+  </nav>
+
+  <!-- Dashboard Summary -->
+  <section id="dashboard" class="active">
+    <h2>📊 Dashboard Overview</h2>
+    <div class="dashboard">
+      <div class="card" onclick="showSection('hr')"><h3>HR</h3><p>42 Employees</p></div>
+      <div class="card" onclick="showSection('finance')"><h3>Finance</h3><p>₹1,20,000 Revenue</p></div>
+      <div class="card" onclick="showSection('sales')"><h3>Sales</h3><p>85 Leads</p></div>
+      <div class="card" onclick="showSection('projects')"><h3>Projects</h3><p>12 Active</p></div>
+      <div class="card" onclick="showSection('inventory')"><h3>Inventory</h3><p>350 Items</p></div>
+    </div>
+
+    <!-- Charts -->
+    <div class="charts">
+      <div class="chart-container"><canvas id="salesChart"></canvas></div>
+      <div class="chart-container"><canvas id="financeChart"></canvas></div>
+    </div>
+  </section>
+
+  <!-- HR Module -->
+  <section id="hr">
+    <h2>👥 HR Module</h2>
+    <div class="module-item">Employee Records</div>
+    <div class="module-item">Attendance & Leave</div>
+    <div class="module-item">Payroll Management</div>
+  </section>
+
+  <!-- Finance Module -->
+  <section id="finance">
+    <h2>💰 Finance Module</h2>
+    <div class="module-item">Accounts Payable/Receivable</div>
+    <div class="module-item">Budget Tracking</div>
+    <div class="module-item">Expense Reports</div>
+  </section>
+
+  <!-- Sales Module -->
+  <section id="sales">
+    <h2>📈 Sales Module</h2>
+    <div class="module-item">Customer Database</div>
+    <div class="module-item">Leads & Opportunities</div>
+    <div class="module-item">Sales Reports</div>
+  </section>
+
+  <!-- Projects Module -->
+  <section id="projects">
+    <h2>📂 Project Module</h2>
+    <div class="module-item">Project Planning</div>
+    <div class="module-item">Task Assignments</div>
+    <div class="module-item">Progress Tracking</div>
+  </section>
+
+  <!-- Inventory Module -->
+  <section id="inventory">
+    <h2>📦 Inventory Module</h2>
+    <div class="module-item">Stock Levels</div>
+    <div class="module-item">Purchase Orders</div>
+    <div class="module-item">Supplier Management</div>
+  </section>
+
+  <script>
+    function showSection(id) {
+      document.querySelectorAll("section").forEach(sec => sec.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+    }
+
+    // Sales Chart (smaller size)
+    new Chart(document.getElementById("salesChart"), {
+      type: "bar",
+      data: {
+        labels: ["Jan", "Feb", "Mar", "Apr", "May"],
+        datasets: [{
+          label: "Sales (₹)",
+          data: [12000, 15000, 18000, 22000, 20000],
+          backgroundColor: "#3498db"
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false }
+    });
+
+    // Finance Chart (smaller size)
+    new Chart(document.getElementById("financeChart"), {
+      type: "line",
+      data: {
+        labels: ["Q1", "Q2", "Q3", "Q4"],
+        datasets: [{
+          label: "Revenue (₹)",
+          data: [30000, 45000, 60000, 75000],
+          borderColor: "#2ecc71",
+          fill: false
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false }
+    });
+  </script>
+
+</body>
+</html>
