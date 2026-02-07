@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal Login</title>
+    <style>
+        /* CSS Variables for consistent theming */
+        :root {
+            --primary-color: #2563eb; /* Royal Blue */
+            --primary-hover: #1d4ed8;
+            --secondary-color: #f3f4f6;
+            --text-color: #1f2937;
+            --text-muted: #6b7280;
+            --error-color: #ef4444;
+            --success-color: #10b981;
+            --bg-color: #ffffff;
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--secondary-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--text-color);
+        }
+
+        /* Main Container */
+        .container {
+            display: flex;
+            width: 90%;
+            max-width: 1000px;
+            background: var(--bg-color);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            min-height: 600px;
+        }
+
+        /* Left Side - Visual/Branding */
+        .brand-section {
+            flex: 1;
+            background: linear-gradient(135deg, var(--primary-color), #1e40af);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .brand-section::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 60%);
+            top: -50%;
+            left: -50%;
+        }
+
+        .brand-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .brand-section h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .brand-section p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 300px;
+            line-height: 1.6;
+        }
+
+        .brand-image {
+            width: 100px;
+            height: 100px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+
+        /* Right Side - Form Area */
+        .form-section {
+            flex: 1;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            background: none;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition-speed);
+            position: relative;
+        }
+
+        .tab-btn.active {
+            color: var(--primary-color);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+
+        /* Forms */
+        .form-wrapper {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .form-wrapper.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px 12px 40px; /* Space for icon */
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color var(--transition-speed);
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary-color);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 12px;
+            bottom: 12px; /* Aligns with input padding */
+            color: var(--text-muted);
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+        }
+
+        .actions a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .actions a:hover {
+            text-decoration: underline;
+        }
+
+        /* Buttons */
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color var(--transition-speed);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .submit-btn:disabled {
+            background-color: var(--text-muted);
+            cursor: not-allowed;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            display: none;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Notifications (Toasts) */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            min-width: 300px;
+            padding: 16px;
+            border-radius: 8px;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateX(120%);
+            transition: transform 0.3s ease-out;
+            border-left: 5px solid;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.success { border-left-color: var(--success-color); }
+        .toast.error { border-left-color: var(--error-color); }
+
+        .toast-icon {
+            font-size: 1.2rem;
+        }
+        .toast.success .toast-icon { color: var(--success-color); }
+        .toast.error .toast-icon { color: var(--error-color); }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                width: 95%;
+                min-height: auto;
+            }
+            .brand-section {
+                padding: 30px;
+                min-height: 200px;
+            }
+            .brand-section h1 { font-size: 1.8rem; }
+            .form-section { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body js-script src="server.js">
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <main class="container">
+        <!-- Brand / Visual Section -->
+        <section class="brand-section">
+            <div class="brand-content">
+                <div class="brand-image">🎓</div>
+                <h1>COMPANY ERP</h1>
+                <p>Access your Progress,company progress all in one place.</p>
+            </div>
+        </section>
+
+        <!-- Form Section -->
+        <section class="form-section">
+            
+            <!-- Navigation Tabs -->
+            <nav class="tabs">
+                <button class="tab-btn active" onclick="switchTab('login')">Company  Login</button>
+                <button class="tab-btn" onclick="switchTab('register')">New member</button>
+            </nav>
+
+            <!-- Login Form -->
+            <div id="login-form" class="form-wrapper active">
+                <h2>Welcome Back</h2>
+                <form onsubmit="handleLogin(event)">
+                    <div class="input-group">
+                        <label for="login-email">Member ID or Email</label>
+                        <input type="text" id="login-email" placeholder="e.g. s1234567" required>
+                        <span class="input-icon">📧</span>
+                    </div>
+                    <div class="input-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" placeholder="••••••••" required>
+                        <span class="input-icon">🔒</span>
+                    </div>
+                    <div class="actions">
+                        <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                            <input type="checkbox"> Remember me
+                        </label>
+                        <a href="#" onclick="showToast('Reset link sent to email (simulation)', 'success')">Forgot Password?</a>
+                    </div>
+                    <button type="submit" class="submit-btn" id="login-btn" >
+                        <span class="btn-text"><a href="dashboard2.html">Sign In</a></span>
+                        <div class="spinner" ></div>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Register Form -->
+            <div id="register-form" class="form-wrapper">
+                <h2>Create Account</h2>
+                <form onsubmit="handleRegister(event)">
+                    <div class="input-group">
+                        <label for="reg-name">Full Name</label>
+                        <input type="text" id="reg-name" placeholder="John Doe" required>
+                        <span class="input-icon">👤</span>
+                    </div>
+                    <div class="input-group">
+                        <label for="reg-email">Member Email</label>
+                        <input type="email" id="reg-email" placeholder="student@university.edu" required>
+                        <span class="input-icon">📧</span>
+                    </div>
+                    <div class="input-group">
+                        <label for="reg-password">Create Password</label>
+                        <input type="password" id="reg-password" placeholder="Min. 8 characters" required minlength="8">
+                        <span class="input-icon">🔒</span>
+                    </div>
+                    <div class="input-group">
+                        <label for="reg-confirm">Confirm Password</label>
+                        <input type="password" id="reg-confirm" placeholder="Confirm password" required>
+                        <span class="input-icon">✅</span>
+                    </div>
+                    <button type="submit" class="submit-btn" id="reg-btn">
+                        <span class="btn-text">Register</span>
+                        <div class="spinner"></div>
+                    </button>
+                </form>
+            </div>
+
+        </section>
+    </main>
+
+    <script >
+        
+        
+
+        // --- Tab Switching Logic ---
+        function switchTab(tabName) {
+            // Remove active class from all buttons and forms
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.form-wrapper').forEach(form => form.classList.remove('active'));
+
+            // Add active class to selected
+            if (tabName === 'login') {
+                document.querySelector('.tab-btn:nth-child(1)').classList.add('active');
+                document.getElementById('login-form').classList.add('active');
+            } else {
+                document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
+                document.getElementById('register-form').classList.add('active');
+            }
+        }
+
+        // --- Mock Backend Logic (Simulating API Calls) ---
+        
+        // Helper to simulate network delay
+        const simulateNetworkRequest = (callback) => {
+            setTimeout(() => {
+                callback();
+            }, 1500); // 1.5 second delay
+        };
+
+        // Helper to toggle loading state
+        const toggleLoading = (btnId, isLoading) => {
+            const btn = document.getElementById(btnId);
+            const spinner = btn.querySelector('.spinner');
+            const text = btn.querySelector('.btn-text');
+
+            if (isLoading) {
+                btn.disabled = true;
+                spinner.style.display = 'block';
+                text.style.display = 'none';
+            } else {
+                btn.disabled = false;
+                spinner.style.display = 'none';
+                text.style.display = 'block';
+            }
+        };
+
+        // Handle Login
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            toggleLoading('login-btn', true);
+
+            simulateNetworkRequest(() => {
+                toggleLoading('login-btn', false);
+                
+                // Simple mock validation logic
+                if (email === 'admin' || password.length < 6) {
+                    showToast('Invalid credentials. Please try again.', 'error');
+                } else {
+                    showToast('Login successful! Redirecting...', 'success');
+                    // Simulate redirect
+                    setTimeout(() => {
+                        document.querySelector('form').reset();
+                    }, 1000);
+                }
+            });
+        }
+
+        // Handle Registration
+        function handleRegister(e) {
+            e.preventDefault();
+            const password = document.getElementById('reg-password').value;
+            const confirm = document.getElementById('reg-confirm').value;
+
+            if (password !== confirm) {
+                showToast('Passwords do not match.', 'error');
+                return;
+            }
+
+            toggleLoading('reg-btn', true);
+
+            simulateNetworkRequest(() => {
+                toggleLoading('reg-btn', false);
+                showToast('Account created successfully! Please login.', 'success');
+                switchTab('login');
+                document.querySelector('form').reset();
+            });
+        }
+
+        // --- Toast Notification System ---
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            
+            // Create toast element
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            const icon = type === 'success' ? '✔' : '✖';
+            
+            toast.innerHTML = `
+                <div class="toast-icon">${icon}</div>
+                <div class="toast-message">${message}</div>
+            `;
+
+            container.appendChild(toast);
+
+            // Trigger animation
+            requestAnimationFrame(() => {
+                toast.classList.add('show');
+            });
+
+            // Remove after 3 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+                toast.addEventListener('transitionend', () => {
+                    toast.remove();
+                });
+            }, 3500);
+        }
+    </script>
+</body>
+</html>

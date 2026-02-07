@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SmartERP Hackathon</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f4f4f4; }
+    section { display: none; min-height: 100vh; }
+    section.active { display: block; }
+
+    /* Auth Pages */
+    .auth-container {
+      display: flex; justify-content: center; align-items: center;
+      height: 100vh; background: linear-gradient(135deg,#00c6ff,#0072ff);
+    }
+    .auth-box {
+      background: white; padding: 40px; border-radius: 15px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3); width: 380px; text-align: center;
+      animation: fadeInUp 0.8s ease-out;
+    }
+    .auth-box h2 { margin-bottom: 20px; color: #2c3e50; }
+    .auth-box input {
+      width: 100%; padding: 12px; margin: 10px 0;
+      border-radius: 8px; border: 1px solid #ccc; transition: 0.3s;
+    }
+    .auth-box input:focus { border-color: #0072ff; outline: none; }
+    .auth-box button {
+      width: 100%; padding: 12px; background: #0072ff; color: white;
+      border: none; border-radius: 8px; cursor: pointer; font-size: 16px;
+      transition: background 0.3s;
+    }
+    .auth-box button:hover { background: #005bb5; }
+    .link { margin-top: 15px; }
+    .link a { color: #0072ff; text-decoration: none; }
+
+    @keyframes fadeInUp { from {transform:translateY(40px);opacity:0;} to {transform:translateY(0);opacity:1;} }
+
+    /* Dashboard */
+    header { background: linear-gradient(135deg,#0072ff,#00c6ff); color: white; padding: 20px; text-align: center; }
+    nav { background: #34495e; padding: 10px; display: flex; justify-content: center; }
+    nav a { color: white; margin: 0 15px; text-decoration: none; font-weight: bold; }
+    nav a:hover { text-decoration: underline; }
+
+    .dashboard { display: flex; flex-wrap: wrap; justify-content: center; margin: 20px; }
+    .card {
+      background: white; width: 220px; margin: 15px; padding: 20px;
+      border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      text-align: center; cursor: pointer; transition: transform 0.3s, background 0.3s;
+    }
+    .card:hover { transform: translateY(-8px); background: #f0f8ff; }
+    .card h3 { margin: 10px 0; color: #2c3e50; }
+
+    .charts { display: flex; flex-wrap: wrap; justify-content: space-around; margin-top: 20px; }
+    .chart-container {
+      width: 300px; height: 220px; margin: 10px;
+      background: #fff; border-radius: 15px; padding: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    canvas { width: 100% !important; height: 100% !important; }
+
+    /* Module sections */
+    .module { padding: 30px; text-align: center; }
+    .module h2 { color: #0072ff; }
+  </style>
+</head>
+<body>
+
+  <!-- Login -->
+  <section id="login" class="active">
+    <div class="auth-container">
+      <div class="auth-box">
+        <h2>SmartERP Login</h2>
+        <input type="email" id="loginEmail" placeholder="Email" required>
+        <input type="password" id="loginPassword" placeholder="Password" required>
+        <button onclick="login()">Login</button>
+        <div class="link"><a href="#" onclick="showSection('signup')">New user? Sign up</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Signup -->
+  <section id="signup">
+    <div class="auth-container">
+      <div class="auth-box">
+        <h2>Create Account</h2>
+        <input type="text" id="signupName" placeholder="Full Name" required>
+        <input type="email" id="signupEmail" placeholder="Email" required>
+        <input type="password" id="signupPassword" placeholder="Password" required>
+        <button onclick="signup()">Sign Up</button>
+        <div class="link"><a href="#" onclick="showSection('login')">Already have an account? Login</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dashboard -->
+  <section id="dashboard">
+    <header>
+      <h1>SmartERP Dashboard</h1>
+      <p>Hackathon Edition – Dynamic ERP System</p>
+    </header>
+
+    <nav>
+      <a href="#" onclick="showSection('dashboard')">Dashboard</a>
+      <a href="#" onclick="showSection('hr')">HR</a>
+      <a href="#" onclick="showSection('finance')">Finance</a>
+      <a href="#" onclick="showSection('sales')">Sales</a>
+      <a href="#" onclick="showSection('projects')">Projects</a>
+      <a href="#" onclick="showSection('inventory')">Inventory</a>
+    </nav>
+
+    <h2>📊 Overview</h2>
+    <div class="dashboard">
+      <div class="card" onclick="showSection('hr')"><h3>HR</h3><p id="empCount">42 Employees</p></div>
+      <div class="card" onclick="showSection('finance')"><h3>Finance</h3><p id="revCount">₹1,20,000 Revenue</p></div>
+      <div class="card" onclick="showSection('sales')"><h3>Sales</h3><p id="leadCount">85 Leads</p></div>
+      <div class="card" onclick="showSection('projects')"><h3>Projects</h3><p id="projCount">12 Active</p></div>
+      <div class="card" onclick="showSection('inventory')"><h3>Inventory</h3><p id="invCount">350 Items</p></div>
+    </div>
+    <div class="charts">
+      <div class="chart-container"><canvas id="salesChart"></canvas></div>
+      <div class="chart-container"><canvas id="financeChart"></canvas></div>
+    </div>
+  </section>
+
+  <!-- Modules -->
+  <section id="hr" class="module"><h2>👥 HR Module</h2><p>Manage employees, attendance, and payroll.</p></section>
+  <section id="finance" class="module"><h2>💰 Finance Module</h2><p>Track revenue, expenses, and budgets.</p></section>
+  <section id="sales" class="module"><h2>📈 Sales Module</h2><p>Handle leads, customers, and reports.</p></section>
+  <section id="projects" class="module"><h2>📂 Project Module</h2><p>Plan, assign tasks, and monitor progress.</p></section>
+  <section id="inventory" class="module"><h2>📦 Inventory Module</h2><p>Manage stock levels and suppliers.</p></section>
+
+  <script>
+    // Switch sections
+    function showSection(id) {
+      document.querySelectorAll("section").forEach(sec => sec.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+    }
+
+    // Login logic
+    function login() {
+      const email = document.getElementById("loginEmail").value;
+      const pass = document.getElementById("loginPassword").value;
+      if(email && pass) {
+        showSection('dashboard');
+      } else {
+        alert("Please enter email and password");
+      }
+    }
+
+    // Signup logic
+    function signup() {
+      const name = document.getElementById("signupName").value;
+      const email = document.getElementById("signupEmail").value;
+      const pass = document.getElementById("signupPassword").value;
+      if(name && email && pass) {
+        alert("Account created!

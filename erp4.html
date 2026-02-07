@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SmartLit ERP Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+</head>
+<body>
+
+  <!-- Dashboard Section -->
+  <section id="dashboard" class="active">
+    <h2>📊 Dashboard Overview</h2>
+    <div class="charts">
+      <canvas id="salesChart"></canvas>
+      <canvas id="financeChart"></canvas>
+    </div>
+  </section>
+
+  <!-- Attach Script -->
+  <script>
+    // Show sections
+    function showSection(id) {
+      document.querySelectorAll("section").forEach(sec => sec.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+    }
+
+    // Fetch Sales Data from Backend
+    fetch("http://localhost:5000/api/sales")
+      .then(res => res.json())
+      .then(data => {
+        const labels = data.map(s => s.month);
+        const values = data.map(s => s.amount);
+
+        new Chart(document.getElementById("salesChart"), {
+          type: "bar",
+          data: {
+            labels: labels,
+            datasets: [{
+              label: "Sales (₹)",
+              data: values,
+              backgroundColor: "#3498db"
+            }]
+          },
+          options: { responsive: true, maintainAspectRatio: false }
+        });
+      });
+
+    // Fetch Finance Revenue
+    fetch("http://localhost:5000/api/finance/revenue")
+      .then(res => res.json())
+      .then(data => {
+        new Chart(document.getElementById("financeChart"), {
+          type: "line",
+          data: {
+            labels: ["Total Revenue"],
+            datasets: [{
+              label: "Revenue (₹)",
+              data: [data.revenue],
+              borderColor: "#2ecc71",
+              fill: false
+            }]
+          },
+          options: { responsive: true, maintainAspectRatio: false }
+        });
+      });
+  </script>
+</body>
+</html>
